@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "thinqtt-python"
+version = "0.1.0"
+description = ""
+authors = ["tinkerborg <tinkerborg@users.noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+uplink = "^0.9.1"
+marshmallow = "^3.5.1"
+marshmallow-dataclass = "^7.5.0"
+inflection = "^0.4.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+pylint = "^2.4.4"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
