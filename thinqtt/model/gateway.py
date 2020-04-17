@@ -2,7 +2,7 @@ import uuid
 from thinqtt import ThinQTT
 from urllib import parse
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass
@@ -30,9 +30,3 @@ class Gateway:
         return parse.urljoin(
             self.emp_uri, "spx/login/signIn?{query}".format(query=query)
         )
-
-
-@dataclass
-class ClientConfig:
-    country_code: str = None
-    language_code: str = None
