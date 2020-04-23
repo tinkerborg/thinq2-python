@@ -4,10 +4,8 @@ import marshmallow_dataclass
 from marshmallow import Schema, fields, pre_load, post_load, EXCLUDE
 from inflection import camelize
 
-from thinqtt.model.auth import UserProfile
 
-
-class DataSchema(Schema):
+class BaseSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
@@ -15,19 +13,23 @@ class DataSchema(Schema):
     def wrap(cls, data_class):
         return marshmallow_dataclass.class_schema(data_class, base_schema=cls)
 
-
-class CamelDataSchema(DataSchema):
+#
+class TransformSchema(BaseSchema):
     def on_bind_field(self, field_name, field):
-        field.data_key = self._transform(field_name)
+        field.data_key = self._transform(field.data_key or field_name)
 
+    def _transform(self, field_name):
+       return field_name
+
+class CamelCaseSchema(TransformSchema):
     def _transform(self, field_name):
         return camelize(field_name, uppercase_first_letter=False)
 
 
 # XXX - make this DRY
-class ProfileResponse(CamelDataSchema):
+class ProfileResponse(CamelCaseSchema):
 
-    account = fields.Nested(marshmallow_dataclass.class_schema(UserProfile))
+    account = fields.Nested(Schema)
 
     def _transform(self, field_name):
         return re.sub(r"(?<=[a-z])Id(?=[A-Z]|$)", "ID", super()._transform(field_name))
@@ -48,10 +50,10 @@ class ThinQResponse(Schema):
 
     def on_bind_field(self, field_name, field):
         if field_name is "result" and self._nested != None:
-            field.nested = CamelDataSchema.wrap(self._nested)
+            field.nested = self._nested.Schema
 
     @post_load
-    def unwrap_result(self, data, **kwargs):
+    def unwrap(self, data, **kwargs):
         return data["result"]
 
 

@@ -12,7 +12,7 @@ from uplink.decorators import inject
 from uplink.hooks import RequestAuditor
 
 import thinqtt
-from thinqtt.schema import DataSchema, ProfileResponse
+from thinqtt.schema import BaseSchema, ProfileResponse
 from thinqtt.model.auth import OAuthToken, UserProfile
 
 REDIRECT_URI = "https://kr.m.lgaccount.com/login/iabClose"
@@ -62,7 +62,7 @@ class OAuthClient(Consumer):
         code: Field,
         grant_type: Field = "authorization_code",
         redirect_uri: Field = REDIRECT_URI,
-    ) -> DataSchema.wrap(OAuthToken):
+    ) -> OAuthToken.Schema:
 
         """Retrieves initial OAuth token from authorization code"""
 
@@ -71,7 +71,7 @@ class OAuthClient(Consumer):
     @post("oauth/1.0/oauth2/token")
     def refresh_token(
         self, refresh_token: Field, grant_type: Field = "refresh_token"
-    ) -> DataSchema.wrap(OAuthToken):
+    ) -> OAuthToken.Schema:
 
         """Retrieves updated OAuth token from refresh token"""
 

@@ -1,9 +1,10 @@
 from marshmallow_dataclass import dataclass
 
 from thinqtt.model.gateway import Gateway
+from thinqtt.schema import BaseSchema
 
 
-@dataclass
+@dataclass(base_schema=BaseSchema)
 class OAuthToken:
     access_token: str
     expires_in: str

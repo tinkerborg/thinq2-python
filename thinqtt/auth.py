@@ -19,17 +19,16 @@ class ThinQTTAuth(RequestTemplate):
         request_builder.add_request_template(self)
 
     def before_request(self, request):
-        self.add_headers(request)
+        self.add_headers(*request)
 
-    def add_headers(self, request):
-        _, _, extras = request
+    def add_headers(self, method, url, extras):
         extras["headers"].update(self.base_headers)
         extras["headers"].update(self.auth_headers)
 
     def after_response(self, request, response):
         if response.status_code == 400:
             self.refresh_token()
-            self.add_headers(request)
+            self.add_headers(*request)
             return transitions.sleep(1)
 
     # XXX - this should throw exceptions if they fail
@@ -69,9 +68,7 @@ class ThinQTTAuth(RequestTemplate):
 
     @property
     def oauth_login_url(self):
-        """Construct the URL for users to log in (in a browser) to start an
-        authenticated session.
-        """
+        """ Returns a URL to start the OAuth flow """
 
         url = urljoin(self.gateway.emp_uri, "spx/login/signIn")
         query = urlencode(
