@@ -11,9 +11,9 @@ from uplink.arguments import Header
 from uplink.decorators import inject
 from uplink.hooks import RequestAuditor
 
-from thinqtt import ThinQTT
+import thinqtt
 from thinqtt.schema import DataSchema, ProfileResponse
-from thinqtt.model.auth import OAuthToken, OAuthProfile
+from thinqtt.model.auth import OAuthToken, UserProfile
 
 REDIRECT_URI = "https://kr.m.lgaccount.com/login/iabClose"
 
@@ -26,9 +26,9 @@ def lg_oauth_signer(request_builder):
         form = urlencode(sorted(request_builder.info["data"].items()))
         url = "{}?{}".format(url, form)
 
-    timestamp = datetime.datetime.utcnow().strftime(ThinQTT.OAUTH_TIMESTAMP_FORMAT)
+    timestamp = datetime.datetime.utcnow().strftime(thinqtt.OAUTH_TIMESTAMP_FORMAT)
     message = "{}\n{}".format(url, timestamp).encode("utf8")
-    secret = ThinQTT.OAUTH_SECRET.encode("utf8")
+    secret = thinqtt.OAUTH_SECRET.encode("utf8")
     digest = hmac.new(secret, message, hashlib.sha1).digest()
     signature = base64.b64encode(digest)
 
@@ -36,7 +36,7 @@ def lg_oauth_signer(request_builder):
         {
             "x-lge-oauth-signature": signature,
             "x-lge-oauth-date": timestamp,
-            "x-lge-appkey": ThinQTT.LGE_APP_KEY,
+            "x-lge-appkey": thinqtt.LGE_APP_KEY,
         }
     )
 
@@ -79,6 +79,6 @@ class OAuthClient(Consumer):
     @get("oauth/1.0/users/profile")
     def get_profile(
         self, access_code: BearerToken
-    ) -> ProfileResponse.wrap(OAuthProfile):
+    ) -> ProfileResponse.wrap(UserProfile):
 
         """Retrieves current user's OAuth profile"""

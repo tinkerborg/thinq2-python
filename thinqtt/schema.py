@@ -91,6 +91,7 @@ def controller(data_type):
         def __getattr__(self, attr):
             if hasattr(self._data, attr):
                 return getattr(self._data, attr)
+            # XXX - fail if super doesn't havegetattr?
             return super().__getattr__(self, attr)
 
         def __setattr__(self, attr, value):

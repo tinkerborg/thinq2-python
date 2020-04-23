@@ -1,4 +1,6 @@
-from dataclasses import dataclass
+from marshmallow_dataclass import dataclass
+
+from thinqtt.model.gateway import Gateway
 
 
 @dataclass
@@ -13,12 +15,16 @@ class OAuthToken:
 
 
 @dataclass
-class OAuthProfile:
+class UserProfile:
     user_id: str
     user_no: str
 
 
 @dataclass
-class ClientConfig:
-    country_code: str = None
-    language_code: str = None
+class ThinQTTSession:
+    country_code: str
+    language_code: str
+    client_id: str
+    gateway: Gateway
+    profile: UserProfile = None
+    token: OAuthToken = None

@@ -1,4 +1,4 @@
-from uplink import get, headers
+from uplink import Consumer, Header, get, headers
 
 from thinqtt.client.base import BaseClient
 from thinqtt.schema import ThinQResponse

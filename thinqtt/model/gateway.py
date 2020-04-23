@@ -1,8 +1,7 @@
 import uuid
-from thinqtt import ThinQTT
+import thinqtt
 from urllib import parse
-
-from dataclasses import dataclass
+from marshmallow_dataclass import dataclass
 
 
 @dataclass
@@ -19,12 +18,12 @@ class Gateway:
             {
                 "country": self.country_code,
                 "language": self.language_code,
-                "svc_list": ThinQTT.SERVICE_CODE,
-                "client_id": ThinQTT.OAUTH_CLIENT_ID,
-                "division": ThinQTT.DIVISION,
-                "redirect_uri": ThinQTT.OAUTH_REDIRECT_URI,
+                "svc_list": thinqtt.SERVICE_CODE,
+                "client_id": thinqtt.OAUTH_CLIENT_ID,
+                "division": thinqtt.DIVISION,
+                "redirect_uri": thinqtt.OAUTH_REDIRECT_URI,
                 "state": uuid.uuid1().hex,
-                "show_thirdparty_login": ThinQTT.THIRD_PARTY_LOGINS,
+                "show_thirdparty_login": thinqtt.THIRD_PARTY_LOGINS,
             }
         )
         return parse.urljoin(
