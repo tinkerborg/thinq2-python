@@ -55,9 +55,9 @@ class ThinQResponse(Schema):
         return data["result"]
 
 
-def dataholder(data_type):
+def controller(data_type):
 
-    schema = marshmallow_dataclass.class_schema(data_type, base_schema=Schema)()
+    schema = data_type.Schema()
 
     def merge_args(self, kwargs):
         attrs = {
