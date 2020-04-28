@@ -1,10 +1,10 @@
 from marshmallow_dataclass import dataclass
 
 from thinqtt.model.gateway import Gateway
-from thinqtt.schema import BaseSchema
+from thinqtt.schema import CamelIDSchema
 
 
-@dataclass(base_schema=BaseSchema)
+@dataclass
 class OAuthToken:
     access_token: str
     expires_in: str
@@ -15,7 +15,7 @@ class OAuthToken:
         self.expires_in = token.expires_in
 
 
-@dataclass
+@dataclass(base_schema=CamelIDSchema)
 class UserProfile:
     user_id: str
     user_no: str
