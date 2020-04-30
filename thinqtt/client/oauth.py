@@ -6,13 +6,12 @@ import hashlib
 from urllib.parse import urlencode
 
 from uplink import Consumer, Field
-from uplink import headers, form_url_encoded, get, post, returns
+from uplink import headers, form_url_encoded, get, post, response_handler
 from uplink.arguments import Header
 from uplink.decorators import inject
 from uplink.hooks import RequestAuditor
 
 import thinqtt
-from thinqtt.schema import BaseSchema, EnvelopeResponse
 from thinqtt.model.auth import OAuthToken, UserProfile
 
 REDIRECT_URI = "https://kr.m.lgaccount.com/login/iabClose"
@@ -55,7 +54,6 @@ class OAuthClient(Consumer):
     auth = {}
 
     @form_url_encoded
-    @returns.json
     @post("oauth/1.0/oauth2/token")
     def get_token(
         self,
@@ -67,7 +65,6 @@ class OAuthClient(Consumer):
         """Retrieves initial OAuth token from authorization code"""
 
     @form_url_encoded
-    @returns.json
     @post("oauth/1.0/oauth2/token")
     def refresh_token(
         self, refresh_token: Field, grant_type: Field = "refresh_token"
@@ -75,10 +72,8 @@ class OAuthClient(Consumer):
 
         """Retrieves updated OAuth token from refresh token"""
 
-    @returns.json
+    @response_handler(lambda response: response.json().get('account'))
     @get("oauth/1.0/users/profile")
-    def get_profile(
-        self, access_code: BearerToken
-    ) -> EnvelopeResponse.wrap(UserProfile, envelope="account"):
+    def get_profile(self, access_code: BearerToken) -> UserProfile.Schema:
 
         """Retrieves current user's OAuth profile"""

@@ -10,6 +10,7 @@ uplink = "^0.9.1"
 marshmallow = "^3.5.1"
 marshmallow-dataclass = "^7.5.0"
 inflection = "^0.4.0"
+marshmallow_enum = "^1.5.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

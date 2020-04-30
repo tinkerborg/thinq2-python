@@ -1,7 +1,6 @@
 import re
 
-import marshmallow_dataclass
-from marshmallow import Schema, fields, pre_load, post_load, EXCLUDE
+from marshmallow import EXCLUDE, Schema
 from inflection import camelize
 
 
@@ -25,26 +24,6 @@ class CamelCaseSchema(BaseSchema):
 class CamelIDSchema(CamelCaseSchema):
     def transform(self, field_name):
         return re.sub(r"(?<=[a-z])Id(?=[A-Z]|$)", "ID", super().transform(field_name))
-
-
-class EnvelopeResponse(BaseSchema):
-    @classmethod
-    def wrap(cls, data_class, envelope=None):
-        base_schema = data_class.Schema if hasattr(data_class, "Schema") else cls
-        schema = marshmallow_dataclass.class_schema(data_class, base_schema=base_schema)
-        if envelope is not None:
-            schema._envelope = envelope
-        return type(schema.__name__, (schema, cls), {})
-
-    @pre_load
-    def unwrap_result(self, data, **kwargs):
-        if hasattr(type(self), "_envelope") and self._envelope is not None:
-            return data[self._envelope]
-        return data
-
-
-class ThinQResponse(EnvelopeResponse):
-    _envelope = "result"
 
 
 def controller(data_type):

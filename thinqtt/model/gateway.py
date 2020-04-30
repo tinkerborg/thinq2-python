@@ -3,8 +3,10 @@ import thinqtt
 from urllib import parse
 from marshmallow_dataclass import dataclass
 
+from thinqtt.schema import CamelCaseSchema
 
-@dataclass
+
+@dataclass(base_schema=CamelCaseSchema)
 class Gateway:
     country_code: str
     language_code: str

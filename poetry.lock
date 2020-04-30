@@ -152,6 +152,17 @@ tests = ["pytest", "pytest-mypy-plugins (>=1.2.0)"]
 union = ["marshmallow-union"]
 
 [[package]]
+category = "main"
+description = "Enum field for Marshmallow"
+name = "marshmallow-enum"
+optional = false
+python-versions = "*"
+version = "1.5.1"
+
+[package.dependencies]
+marshmallow = ">=2.0.0"
+
+[[package]]
 category = "dev"
 description = "McCabe checker, plugin for flake8"
 name = "mccabe"
@@ -385,7 +396,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "fad50a8bb4d9562b2082346e00ec66ef53fd813a57acd079d0808152836c913e"
+content-hash = "f5ef20835323ab8ba3efa3c76e5d8ea990a6c9b591cfa8c1ae54b828deee2c64"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -458,6 +469,10 @@ marshmallow = [
 ]
 marshmallow-dataclass = [
     {file = "marshmallow_dataclass-7.5.0.tar.gz", hash = "sha256:1bf04647541ab7c5fd4184984391c56b1613ff7e0ef9dbd63acfb5f509f43951"},
+]
+marshmallow-enum = [
+    {file = "marshmallow-enum-1.5.1.tar.gz", hash = "sha256:38e697e11f45a8e64b4a1e664000897c659b60aa57bfa18d44e226a9920b6e58"},
+    {file = "marshmallow_enum-1.5.1-py2.py3-none-any.whl", hash = "sha256:57161ab3dbfde4f57adeb12090f39592e992b9c86d206d02f6bd03ebec60f072"},
 ]
 mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
