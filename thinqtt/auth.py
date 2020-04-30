@@ -16,6 +16,7 @@ from thinqtt.schema import controller, initializer
 @controller(ThinQTTSession)
 class ThinQTTAuth(RequestTemplate):
     def __call__(self, request_builder):
+        self._ret = request_builder.return_type
         request_builder.add_request_template(self)
 
     def before_request(self, request):
@@ -27,6 +28,17 @@ class ThinQTTAuth(RequestTemplate):
 
     def after_response(self, request, response):
         if response.status_code == 400:
+            # XXX - thinq auth error - find a cleaner way of handling this
+            # this gets raised when the oauth code is expired/invalid
+            # XXX - this should also die on repeated 400s for the same request
+            # (after token refresh)
+            try:
+                content = response.json()
+                if content.get("resultCode") != "0102":
+                    return
+            except ValueError:
+                pass
+
             self.refresh_token()
             self.add_headers(*request)
             return transitions.sleep(1)
