@@ -72,7 +72,7 @@ class OAuthClient(Consumer):
 
         """Retrieves updated OAuth token from refresh token"""
 
-    @response_handler(lambda response: response.json().get('account'))
+    @response_handler(lambda response: response.json().get("account"))
     @get("oauth/1.0/users/profile")
     def get_profile(self, access_code: BearerToken) -> UserProfile.Schema:
 
