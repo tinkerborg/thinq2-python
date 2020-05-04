@@ -229,6 +229,17 @@ pyparsing = ">=2.0.2"
 six = "*"
 
 [[package]]
+category = "main"
+description = "MQTT version 3.1.1 client class"
+name = "paho-mqtt"
+optional = false
+python-versions = "*"
+version = "1.5.0"
+
+[package.extras]
+proxy = ["pysocks"]
+
+[[package]]
 category = "dev"
 description = "plugin and hook calling mechanisms for python"
 name = "pluggy"
@@ -450,7 +461,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "1095b034b1d1e1f85790fdc58f3e0322a9a513b9da35bd7505d77545f8c4b85e"
+content-hash = "0d4723d878b04b91250c57256693057d7751db82b9888f7fa68249d6fbd7dc63"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -594,6 +605,9 @@ mypy-extensions = [
 packaging = [
     {file = "packaging-20.3-py2.py3-none-any.whl", hash = "sha256:82f77b9bee21c1bafbf35a84905d604d5d1223801d639cf3ed140bd651c08752"},
     {file = "packaging-20.3.tar.gz", hash = "sha256:3c292b474fda1671ec57d46d739d072bfd495a4f51ad01a055121d81e952b7a3"},
+]
+paho-mqtt = [
+    {file = "paho-mqtt-1.5.0.tar.gz", hash = "sha256:e3d286198baaea195c8b3bc221941d25a3ab0e1507fc1779bdb7473806394be4"},
 ]
 pluggy = [
     {file = "pluggy-0.13.1-py2.py3-none-any.whl", hash = "sha256:966c145cd83c96502c3c3868f50408687b38434af77734af1e9ca461a4081d2d"},

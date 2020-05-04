@@ -1,3 +1,5 @@
+from tempfile import NamedTemporaryFile
+
 def memoize(func):
     memo = {}
 
@@ -8,3 +10,9 @@ def memoize(func):
         return memo[key]
 
     return inner
+
+def create_tempfile(content):
+    file = NamedTemporaryFile()
+    file.write(content.encode('utf8'))
+    file.seek(0)
+    return file

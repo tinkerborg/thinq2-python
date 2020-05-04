@@ -16,3 +16,4 @@ LGE_APP_KEY = "LGAO221A02"
 THIRD_PARTY_LOGINS = "GGL,AMZ,FBK"
 
 AWS_IOTT_CA_CERT_URL = "https://www.websecurity.digicert.com/content/dam/websitesecurity/digitalassets/desktop/pdfs/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem"
+AWS_IOTT_ALPN_PROTOCOL = "x-amzn-mqtt-ca"
