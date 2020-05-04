@@ -49,10 +49,7 @@ def controller(data_type, **children):
         # XXX - fix infinite recursion error if called w/ no args
         def __init__(self, data=None, **kwargs):
             self._children = AttrDict(
-                {
-                    key: Controller(kwargs[key])
-                    for key, Controller in children.items()
-                }
+                {key: Controller(kwargs[key]) for key, Controller in children.items()}
             )
 
             if data is None:

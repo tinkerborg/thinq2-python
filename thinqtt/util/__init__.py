@@ -1,8 +1,10 @@
-def memoize(f, *args):
-    print("memozie %s" % f.__name__)
+def memoize(func):
+    memo = {}
 
-    def inner(caller, *args, **kwargs):
-        print("caller %s" % caller)
-        return f(caller, *args, **kwargs)
+    def inner(*args, **kwargs):
+        key = str(dict(args=args, kwargs=kwargs))
+        if key not in memo:
+            memo[key] = func(*args, **kwargs)
+        return memo[key]
 
     return inner

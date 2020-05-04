@@ -1,7 +1,13 @@
-from uplink import get
+from uplink import Field
+from uplink import get, post, delete, json
 
 from thinqtt.client.base import BaseClient
-from thinqtt.model.thinq import DeviceCollection, ThinQResult, ThinQResultSuccess
+from thinqtt.model.thinq import (
+    ThinQResult,
+    ThinQResultSuccess,
+    DeviceCollection,
+    IOTRegistration,
+)
 
 
 class ThinQClient(BaseClient):
@@ -14,3 +20,16 @@ class ThinQClient(BaseClient):
     @get("service/users/client")
     def get_registered(self) -> ThinQResultSuccess():
         """Get client registration status"""
+
+    @post("service/users/client")
+    def register(self) -> ThinQResultSuccess():
+        """Register client ID"""
+
+    @delete("service/users/client")
+    def deregister(self) -> ThinQResultSuccess():
+        """Deregister client ID"""
+
+    @json
+    @post("service/users/client/certificate")
+    def register_iot(self, csr: Field) -> ThinQResult(IOTRegistration):
+        """Deregister client ID"""

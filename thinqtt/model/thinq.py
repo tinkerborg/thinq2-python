@@ -66,6 +66,12 @@ class DeviceCollection:
     items: List[Device] = field(metadata=dict(data_key="item"))
 
 
+@dataclass(base_schema=CamelCaseSchema)
+class IOTRegistration:
+    certificate_pem: str
+    subscriptions: List[str]
+
+
 class ThinQResultCode(Enum):
     OK = "0000"
     PARTIAL_OK = "0001"
