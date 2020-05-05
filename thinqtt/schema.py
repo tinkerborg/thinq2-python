@@ -1,5 +1,6 @@
 import re
 
+
 from dataclasses import is_dataclass
 from marshmallow import Schema, SchemaOpts, EXCLUDE, post_load
 from inflection import camelize

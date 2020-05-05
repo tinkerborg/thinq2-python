@@ -1,13 +1,18 @@
 from enum import Enum
-from dataclasses import field
+from dataclasses import field, make_dataclass
 from typing import List
+
+import marshmallow_dataclass
 
 from marshmallow import Schema, fields, post_load
 from marshmallow_dataclass import dataclass
 from marshmallow_enum import EnumField
 
-from thinqtt.schema import CamelCaseSchema
+from inflection import underscore, camelize
+
+from thinqtt.schema import CamelCaseSchema, BaseSchema
 from thinqtt.model.device import Device, device_types
+from thinqtt.util import memoize
 
 
 @dataclass(base_schema=CamelCaseSchema)
@@ -174,3 +179,67 @@ class ThinQResult(BaseThinQResult):
         if data["result_code"] != ThinQResultCode.OK:
             raise ThinQException(ThinQResultCode(data["result_code"]))
         return data["result"]
+
+
+class ModelJsonDataclass:
+    """ Builds a marshmallow-enabled dataclass from an LG "modeljson" object """
+
+    def __init__(self, model):
+        self.model = model
+
+    def build(self, dataclass_name=None):
+        DeviceModel = make_dataclass(dataclass_name or self.model_type, self.fields)
+        marshmallow_dataclass.add_schema(DeviceModel, base_schema=BaseSchema)
+        DeviceModel.Enum = self.enums
+        return DeviceModel
+
+    def _field_definition(self, name, spec):
+        key = underscore(name)
+        field_type = self._field_type(key, spec)
+        return (key, field_type, field(metadata=self._field_meta(name, field_type)))
+
+    def _field_meta(self, name, field_type):
+        return dict(data_key=name)
+
+    def _field_type(self, name, spec):
+        if "dataType" in spec:
+            if spec["dataType"].lower() == "enum":
+                return self._enum_field(name, self._map_values(spec["valueMapping"]))
+
+            elif spec["dataType"].lower() == "range":
+                # XXX - validation check
+                return int
+
+        elif "ref" in spec:
+            return self._enum_field(name, self._ref_values(spec["ref"]))
+
+        # XXX - non generic exceptions
+        raise Exception("Unknown modelJson field type in {}".format(name))
+
+    def _ref_values(self, ref):
+        return list(self.model[ref].keys()) + ["NOT_SELECTED"]
+
+    def _map_values(self, mappings):
+        return {key: mapping["index"] for key, mapping in mappings.items()}
+
+    def _enum_field(self, name, values):
+        return Enum(camelize(name), values)
+
+    @property
+    @memoize
+    def fields(self):
+        return [
+            self._field_definition(data_key, spec)
+            for data_key, spec in self.model["MonitoringValue"].items()
+        ]
+
+    @property
+    @memoize
+    def enums(self):
+        return {
+            name: field for name, field, _ in self.fields if issubclass(field, Enum)
+        }
+
+    @property
+    def model_type(self):
+        return self.model.get("Info", {"modelType": "UnknownDevice"}).get("modelType")
