@@ -7,10 +7,11 @@ from marshmallow_dataclass import dataclass
 from marshmallow_enum import EnumField
 
 from thinqtt.schema import CamelCaseSchema
+from thinqtt.model.device import Device, device_types
 
 
 @dataclass(base_schema=CamelCaseSchema)
-class Device:
+class DeviceDescriptor:
     device_id: str
     model_name: str
     device_type: int
@@ -59,11 +60,15 @@ class Device:
     combined_product_yn: str
     master_yn: str
     tclcount: int
+    snapshot: Device
+
+    class Meta(CamelCaseSchema.Meta):
+        polymorph = dict(snapshot=lambda x: device_types.get(x.device_type))
 
 
 @dataclass(base_schema=CamelCaseSchema)
 class DeviceCollection:
-    items: List[Device] = field(metadata=dict(data_key="item"))
+    items: List[DeviceDescriptor] = field(metadata=dict(data_key="item"))
 
 
 @dataclass(base_schema=CamelCaseSchema)

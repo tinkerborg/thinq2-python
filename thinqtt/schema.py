@@ -1,11 +1,19 @@
 import re
 
 from dataclasses import is_dataclass
-from marshmallow import EXCLUDE, Schema
+from marshmallow import Schema, SchemaOpts, EXCLUDE, post_load
 from inflection import camelize
 
 
+class BaseSchemaOpts(SchemaOpts):
+    def __init__(self, meta, **kwargs):
+        super().__init__(meta, **kwargs)
+        self.polymorph = getattr(meta, "polymorph", {})
+
+
 class BaseSchema(Schema):
+    OPTIONS_CLASS = BaseSchemaOpts
+
     class Meta:
         unknown = EXCLUDE
 
@@ -14,6 +22,21 @@ class BaseSchema(Schema):
 
     def transform(self, field_name):
         return field_name
+
+    @post_load(pass_original=True)
+    def polymorphism(self, item, data, **kwargs):
+        for field_name, factory in self.opts.polymorph.items():
+            field_type = factory(item)
+            field = self.fields.get(field_name)
+            if is_dataclass(field_type):
+                schema = field_type.Schema()
+            elif isinstance(field_type, Schema):
+                schema = field_type
+            else:
+                raise Exception("Polymorphed type isn't a dataclass or schema!")
+
+            setattr(item, field_name, schema.load(data[field.data_key]))
+        return item
 
 
 class CamelCaseSchema(BaseSchema):

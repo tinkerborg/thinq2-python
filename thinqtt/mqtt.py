@@ -18,17 +18,16 @@ from thinqtt import AWS_IOTT_CA_CERT_URL, AWS_IOTT_ALPN_PROTOCOL
 
 @controller(MQTTConfiguration, auth=ThinQTTAuth)
 class ThinQTT:
-    
     def connect(self):
         endpoint = urlparse(self.route.mqtt_server)
         self.client.connect(endpoint.hostname, endpoint.port)
 
     def loop_start(self):
         self.client.loop_start()
-    
+
     def loop_forever(self):
         self.client.loop_forever()
-    
+
     def on_connect(self, client, userdata, flags, rc):
         for topic in self.registration.subscriptions:
             client.subscribe(topic, 1)
