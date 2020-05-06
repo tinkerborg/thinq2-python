@@ -8,6 +8,7 @@ from thinqtt.schema import CamelIDSchema
 class OAuthToken:
     access_token: str
     expires_in: str
+    oauth2_backend_url: str = None
     refresh_token: str = None
 
     def update(self, token: "OAuthToken"):

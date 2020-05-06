@@ -60,7 +60,7 @@ class OAuthClient(Consumer):
         code: Field,
         grant_type: Field = "authorization_code",
         redirect_uri: Field = REDIRECT_URI,
-    ) -> OAuthToken.Schema:
+    ) -> OAuthToken.Schema():
 
         """Retrieves initial OAuth token from authorization code"""
 
@@ -68,7 +68,7 @@ class OAuthClient(Consumer):
     @post("oauth/1.0/oauth2/token")
     def refresh_token(
         self, refresh_token: Field, grant_type: Field = "refresh_token"
-    ) -> OAuthToken.Schema:
+    ) -> OAuthToken.Schema():
 
         """Retrieves updated OAuth token from refresh token"""
 

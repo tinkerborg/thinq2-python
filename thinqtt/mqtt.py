@@ -6,7 +6,6 @@ from OpenSSL import crypto
 from OpenSSL.SSL import FILETYPE_PEM
 from paho.mqtt.client import Client
 
-from thinqtt.auth import ThinQTTAuth
 from thinqtt.util import create_tempfile, memoize
 from thinqtt.model.config import MQTTConfiguration
 from thinqtt.schema import controller, initializer
@@ -48,10 +47,12 @@ class ThinQTT:
         return client
 
     @property
+    @memoize
     def thinq_client(self):
         return ThinQClient(base_url=self._auth.gateway.thinq2_uri, auth=self._auth)
 
     @property
+    @memoize
     def common_client(self):
         return CommonClient(auth=self._auth)
 
