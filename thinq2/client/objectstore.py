@@ -11,4 +11,4 @@ class ObjectStoreClient(BaseClient):
     @returns.json
     @get
     def get_json_url(self, url: Url):
-        """Retrieve modelJSON object"""
+        """Retrieves an arbitrary JSON object"""

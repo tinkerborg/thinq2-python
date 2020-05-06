@@ -17,11 +17,11 @@ class ThinQClient(BaseClient):
 
     @get("service/application/dashboard")
     def get_devices(self) -> ThinQResult(DeviceCollection):
-        """Retrieves collection of user's registered devices"""
+        """Retrieves collection of user's registered devices with dashboard data."""
 
     @get("service/devices/{device_id}")
     def get_device(self, device_id: Path) -> ThinQResult(DeviceDescriptor):
-        """Retrieves collection of user's registered devices"""
+        """Retrieves an individual device"""
 
     @get("service/application/modeljson")
     def get_model_json_descriptor(
@@ -44,4 +44,4 @@ class ThinQClient(BaseClient):
     @json
     @post("service/users/client/certificate")
     def register_iot(self, csr: Field) -> ThinQResult(IOTRegistration):
-        """Deregister client ID"""
+        """Register an IoT/MQTT session, given a csr"""

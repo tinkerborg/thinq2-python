@@ -14,7 +14,7 @@ breaking changes are almost guaranteed to happen. Fun times!
 
 ## Development
 
-This python uses [poetry](https://python-poetry.org/) for dependency management.
+This project uses [poetry](https://python-poetry.org/) for dependency management.
 
 To configure a development environment, run `poetry install`.
 
@@ -32,7 +32,10 @@ Example:
 The example script will bootstrap the application state on first run, walking
 you through the OAuth flow. If authentication succeeds, you should see a
 display of basic account information and a list of your ThinQv2 devices. The
-script will then begin dumping device events received via MQTT.
+script will then begin dumping device events received via MQTT. Try turning
+devices on/off or otherwise changing their state, and you should see raw events
+being sent.
+
 
 ## Contributing
 
