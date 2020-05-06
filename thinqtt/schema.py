@@ -1,7 +1,10 @@
 import re
+import inspect
 
 from dataclasses import is_dataclass
-from marshmallow import Schema, SchemaOpts, EXCLUDE, post_load
+
+from attrdict import AttrDict
+from marshmallow import EXCLUDE, Schema, SchemaOpts, post_load
 from inflection import camelize
 
 from thinqtt.util import memoize
@@ -52,6 +55,10 @@ class CamelIDSchema(CamelCaseSchema):
         return re.sub(r"(?<=[a-z])Id(?=[A-Z]|$)", "ID", super().transform(field_name))
 
 
+class AbstractController:
+    pass
+
+
 def controller_class(data_type, **children):
     schema = data_type.Schema()
 
@@ -62,24 +69,36 @@ def controller_class(data_type, **children):
         defaults = schema.dump({k: v for k, v in attrs.items() if v is not None})
         return {**defaults, **kwargs}
 
-    class AttrDict(dict):
-        def __init__(self, *args, **kwargs):
-            super(AttrDict, self).__init__(*args, **kwargs)
-            self.__dict__ = self
-
-    class Controller(object):
+    class Controller(AbstractController):
         _data: data_type = None
 
         # XXX - fix infinite recursion error if called w/ no args
-        def __init__(self, data=None, **kwargs):
+        def __init__(self, data=None, *args, **kwargs):
+            init = inspect.signature(super().__init__)
+            pass_keys = AttrDict(
+                filter(self._param_filter, init.parameters.items())
+            ).keys()
+            pass_params = {k: v for k, v in kwargs.items() if k in pass_keys}
+
+            super().__init__(**pass_params)
+
             if data is None:
                 self._data = AttrDict(kwargs)
-                self._data = schema.load(merge_args(self, kwargs))
-            elif is_dataclass(data):
-                self._data = data
-                super().__init__(**kwargs)
+                args = AttrDict(filter(self._args_filter, kwargs.items()))
+                self._data = schema.load(merge_args(self, args))
             else:
-                self._data = schema.load(data)
+                if is_dataclass(data):
+                    self._data = data
+                else:
+                    self._data = schema.load(data)
+
+        def _args_filter(self, item):
+            key, value = item
+            return not isinstance(value, AbstractController)
+
+        def _param_filter(self, item):
+            name, param = item
+            return param.kind in [param.POSITIONAL_OR_KEYWORD, param.KEYWORD_ONLY]
 
         @classmethod
         def load(cls, data):
@@ -111,10 +130,21 @@ def controller_class(data_type, **children):
 
 
 def controller_factory(func):
+    field_name = func.__name__
+
     @property
     @memoize
     def inner(self, *args, **kwargs):
-        return func(self, getattr(self._data, func.__name__))
+        if isinstance(self._data, dict):
+            existing = self._data.get(field_name, None)
+        else:
+            existing = getattr(self._data, field_name, None)
+
+        if isinstance(existing, AbstractController):
+            """ If it's already a controller, return it """
+            return existing
+
+        return func(self, existing)
 
     return inner
 
@@ -133,11 +163,8 @@ def initializer(obj, attr="_data"):
         if data is None:
             return obj(self)
 
-        try:
-            return getattr(data, obj.__name__)
-        except AttributeError:
-            value = obj(self)
-            setattr(data, obj.__name__, value)
-            return value
+        value = getattr(data, obj.__name__, None) or obj(self)
+        setattr(data, obj.__name__, value)
+        return value
 
     return inner

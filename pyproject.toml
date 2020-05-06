@@ -13,6 +13,7 @@ inflection = "^0.4.0"
 marshmallow_enum = "^1.5.1"
 PyOpenSSL = "^19.1.0"
 paho-mqtt = "^1.5.0"
+attrdict = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
