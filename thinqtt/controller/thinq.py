@@ -1,5 +1,5 @@
-from thinqtt.mqtt import ThinQTT
-from thinqtt.auth import ThinQTTAuth
+from thinqtt.controller.mqtt import ThinQTT
+from thinqtt.controller.auth import ThinQTTAuth
 from thinqtt.model.config import ThinQConfiguration
 from thinqtt.schema import controller
 
