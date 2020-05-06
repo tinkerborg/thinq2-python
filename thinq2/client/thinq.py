@@ -1,8 +1,8 @@
 from uplink import Field, Path, Query
 from uplink import get, post, delete, json
 
-from thinqtt.client.base import BaseClient
-from thinqtt.model.thinq import (
+from thinq2.client.base import BaseClient
+from thinq2.model.thinq import (
     DeviceCollection,
     DeviceDescriptor,
     ThinQResult,

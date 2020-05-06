@@ -2,15 +2,15 @@ import secrets
 import base64
 import uuid
 import re
-import thinqtt
+import thinq2
 
 from urllib.parse import urlencode, urljoin, urlparse, parse_qs
 
 from uplink.clients.io import RequestTemplate, transitions
-from thinqtt.client.oauth import OAuthClient
-from thinqtt.client.gateway import GatewayClient
-from thinqtt.model.auth import ThinQSession
-from thinqtt.schema import controller, initializer
+from thinq2.client.oauth import OAuthClient
+from thinq2.client.gateway import GatewayClient
+from thinq2.model.auth import ThinQSession
+from thinq2.schema import controller, initializer
 
 
 @controller(ThinQSession)
@@ -69,13 +69,13 @@ class ThinQAuth(RequestTemplate):
             "x-country-code": self.country_code,
             "x-language-code": self.language_code,
             "x-message-id": self.message_id,
-            "x-api-key": thinqtt.API_KEY,
-            "x-service-code": thinqtt.SERVICE_CODE,
-            "x-service-phase": thinqtt.SERVICE_PHASE,
-            "x-thinq-app-level": thinqtt.APP_LEVEL,
-            "x-thinq-app-os": thinqtt.APP_OS,
-            "x-thinq-app-type": thinqtt.APP_TYPE,
-            "x-thinq-app-ver": thinqtt.APP_VERSION,
+            "x-api-key": thinq2.API_KEY,
+            "x-service-code": thinq2.SERVICE_CODE,
+            "x-service-phase": thinq2.SERVICE_PHASE,
+            "x-thinq-app-level": thinq2.APP_LEVEL,
+            "x-thinq-app-os": thinq2.APP_OS,
+            "x-thinq-app-type": thinq2.APP_TYPE,
+            "x-thinq-app-ver": thinq2.APP_VERSION,
         }
 
     @property
@@ -87,11 +87,11 @@ class ThinQAuth(RequestTemplate):
             {
                 "country": self.country_code,
                 "language": self.language_code,
-                "client_id": thinqtt.LGE_APP_KEY,
-                "svc_list": thinqtt.SERVICE_CODE,
-                "division": thinqtt.DIVISION,
-                "show_thirdparty_login": thinqtt.THIRD_PARTY_LOGINS,
-                "redirect_uri": thinqtt.OAUTH_REDIRECT_URI,
+                "client_id": thinq2.LGE_APP_KEY,
+                "svc_list": thinq2.SERVICE_CODE,
+                "division": thinq2.DIVISION,
+                "show_thirdparty_login": thinq2.THIRD_PARTY_LOGINS,
+                "redirect_uri": thinq2.OAUTH_REDIRECT_URI,
                 "state": uuid.uuid1().hex,
             }
         )

@@ -1,7 +1,7 @@
 from dataclasses import field
 from marshmallow_dataclass import dataclass
 
-from thinqtt.schema import CamelCaseSchema
+from thinq2.schema import CamelCaseSchema
 
 from .base import Device
 

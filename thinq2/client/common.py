@@ -1,8 +1,8 @@
 from uplink import get
 
-from thinqtt.client.base import BaseClient
-from thinqtt.model.common import Route
-from thinqtt.model.thinq import ThinQResult
+from thinq2.client.base import BaseClient
+from thinq2.model.common import Route
+from thinq2.model.thinq import ThinQResult
 
 
 class CommonClient(BaseClient):

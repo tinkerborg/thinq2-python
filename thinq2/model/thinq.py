@@ -10,9 +10,9 @@ from marshmallow_enum import EnumField
 
 from inflection import underscore, camelize
 
-from thinqtt.schema import CamelCaseSchema, BaseSchema
-from thinqtt.model.device import Device, device_types
-from thinqtt.util import memoize
+from thinq2.schema import CamelCaseSchema, BaseSchema
+from thinq2.model.device import Device, device_types
+from thinq2.util import memoize
 
 
 @dataclass(base_schema=CamelCaseSchema)

@@ -11,8 +11,8 @@ from uplink.arguments import Header
 from uplink.decorators import inject
 from uplink.hooks import RequestAuditor
 
-import thinqtt
-from thinqtt.model.auth import OAuthToken, UserProfile
+import thinq2
+from thinq2.model.auth import OAuthToken, UserProfile
 
 REDIRECT_URI = "https://kr.m.lgaccount.com/login/iabClose"
 
@@ -25,9 +25,9 @@ def lg_oauth_signer(request_builder):
         form = urlencode(sorted(request_builder.info["data"].items()))
         url = "{}?{}".format(url, form)
 
-    timestamp = datetime.datetime.utcnow().strftime(thinqtt.OAUTH_TIMESTAMP_FORMAT)
+    timestamp = datetime.datetime.utcnow().strftime(thinq2.OAUTH_TIMESTAMP_FORMAT)
     message = "{}\n{}".format(url, timestamp).encode("utf8")
-    secret = thinqtt.OAUTH_SECRET.encode("utf8")
+    secret = thinq2.OAUTH_SECRET.encode("utf8")
     digest = hmac.new(secret, message, hashlib.sha1).digest()
     signature = base64.b64encode(digest)
 
@@ -35,7 +35,7 @@ def lg_oauth_signer(request_builder):
         {
             "x-lge-oauth-signature": signature,
             "x-lge-oauth-date": timestamp,
-            "x-lge-appkey": thinqtt.LGE_APP_KEY,
+            "x-lge-appkey": thinq2.LGE_APP_KEY,
         }
     )
 

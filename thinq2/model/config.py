@@ -1,8 +1,8 @@
 from marshmallow_dataclass import dataclass
 
-from thinqtt.model.auth import ThinQSession
-from thinqtt.model.common import Route
-from thinqtt.model.thinq import IOTRegistration
+from thinq2.model.auth import ThinQSession
+from thinq2.model.common import Route
+from thinq2.model.thinq import IOTRegistration
 
 
 @dataclass

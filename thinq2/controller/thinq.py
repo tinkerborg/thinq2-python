@@ -1,10 +1,10 @@
-from thinqtt.schema import controller
-from thinqtt.util import memoize
-from thinqtt.client.thinq import ThinQClient
-from thinqtt.controller.mqtt import ThinQMQTT
-from thinqtt.controller.auth import ThinQAuth
-from thinqtt.controller.device import ThinQDevice
-from thinqtt.model.config import ThinQConfiguration
+from thinq2.schema import controller
+from thinq2.util import memoize
+from thinq2.client.thinq import ThinQClient
+from thinq2.controller.mqtt import ThinQMQTT
+from thinq2.controller.auth import ThinQAuth
+from thinq2.controller.device import ThinQDevice
+from thinq2.model.config import ThinQConfiguration
 
 
 @controller(ThinQConfiguration)

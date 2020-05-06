@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "thinqtt"
+name = "thinq2"
 version = "0.1.0"
 description = ""
 authors = ["tinkerborg <tinkerborg@users.noreply.github.com>"]

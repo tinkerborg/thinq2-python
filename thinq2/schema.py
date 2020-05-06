@@ -7,7 +7,7 @@ from attrdict import AttrDict
 from marshmallow import EXCLUDE, Schema, SchemaOpts, post_load
 from inflection import camelize
 
-from thinqtt.util import memoize
+from thinq2.util import memoize
 
 
 class BaseSchemaOpts(SchemaOpts):

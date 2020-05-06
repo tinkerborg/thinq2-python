@@ -1,7 +1,7 @@
 from marshmallow_dataclass import dataclass
 
-from thinqtt.model.gateway import Gateway
-from thinqtt.schema import CamelIDSchema
+from thinq2.model.gateway import Gateway
+from thinq2.schema import CamelIDSchema
 
 
 @dataclass

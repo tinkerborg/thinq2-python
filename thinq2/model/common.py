@@ -1,6 +1,6 @@
 from marshmallow_dataclass import dataclass
 
-from thinqtt.schema import CamelCaseSchema
+from thinq2.schema import CamelCaseSchema
 
 
 @dataclass(base_schema=CamelCaseSchema)

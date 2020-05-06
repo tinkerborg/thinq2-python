@@ -1,9 +1,9 @@
 import uuid
-import thinqtt
+import thinq2
 from urllib import parse
 from marshmallow_dataclass import dataclass
 
-from thinqtt.schema import CamelCaseSchema
+from thinq2.schema import CamelCaseSchema
 
 
 @dataclass(base_schema=CamelCaseSchema)
@@ -20,12 +20,12 @@ class Gateway:
             {
                 "country": self.country_code,
                 "language": self.language_code,
-                "svc_list": thinqtt.SERVICE_CODE,
-                "client_id": thinqtt.OAUTH_CLIENT_ID,
-                "division": thinqtt.DIVISION,
-                "redirect_uri": thinqtt.OAUTH_REDIRECT_URI,
+                "svc_list": thinq2.SERVICE_CODE,
+                "client_id": thinq2.OAUTH_CLIENT_ID,
+                "division": thinq2.DIVISION,
+                "redirect_uri": thinq2.OAUTH_REDIRECT_URI,
                 "state": uuid.uuid1().hex,
-                "show_thirdparty_login": thinqtt.THIRD_PARTY_LOGINS,
+                "show_thirdparty_login": thinq2.THIRD_PARTY_LOGINS,
             }
         )
         return parse.urljoin(

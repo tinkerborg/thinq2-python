@@ -6,13 +6,13 @@ from OpenSSL import crypto
 from OpenSSL.SSL import FILETYPE_PEM
 from paho.mqtt.client import Client
 
-from thinqtt.util import create_tempfile, memoize
-from thinqtt.model.config import MQTTConfiguration
-from thinqtt.schema import controller, initializer
-from thinqtt.client.thinq import ThinQClient
-from thinqtt.client.common import CommonClient
+from thinq2.util import create_tempfile, memoize
+from thinq2.model.config import MQTTConfiguration
+from thinq2.schema import controller, initializer
+from thinq2.client.thinq import ThinQClient
+from thinq2.client.common import CommonClient
 
-from thinqtt import AWS_IOTT_CA_CERT_URL, AWS_IOTT_ALPN_PROTOCOL
+from thinq2 import AWS_IOTT_CA_CERT_URL, AWS_IOTT_ALPN_PROTOCOL
 
 
 @controller(MQTTConfiguration)

@@ -1,8 +1,8 @@
-from thinqtt.schema import controller
-from thinqtt.util import memoize
-from thinqtt.client.thinq import ThinQClient
-from thinqtt.client.objectstore import ObjectStoreClient
-from thinqtt.model.thinq import DeviceDescriptor, ModelJsonDataclass
+from thinq2.schema import controller
+from thinq2.util import memoize
+from thinq2.client.thinq import ThinQClient
+from thinq2.client.objectstore import ObjectStoreClient
+from thinq2.model.thinq import DeviceDescriptor, ModelJsonDataclass
 
 
 @controller(DeviceDescriptor)

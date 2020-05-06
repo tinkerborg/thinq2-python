@@ -1,6 +1,6 @@
 from uplink import Url, get, returns
 
-from thinqtt.client.base import BaseClient
+from thinq2.client.base import BaseClient
 
 
 class ObjectStoreClient(BaseClient):
