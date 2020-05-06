@@ -17,7 +17,7 @@ class ThinQDevice:
     @property
     @memoize
     def model_json(self):
-         return self._object_store_client.get_json_url(self.model_json_uri)
+        return self._object_store_client.get_json_url(self.model_json_uri)
 
     @property
     @memoize

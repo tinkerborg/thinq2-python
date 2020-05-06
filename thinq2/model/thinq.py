@@ -180,6 +180,7 @@ class ThinQResult(BaseThinQResult):
             raise ThinQException(ThinQResultCode(data["result_code"]))
         return data["result"]
 
+
 @dataclass(base_schema=CamelCaseSchema)
 class ModelJsonDescriptor:
     """ ModelJSON metadata """
