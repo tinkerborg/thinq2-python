@@ -8,7 +8,7 @@ from paho.mqtt.client import Client
 
 from thinqtt.auth import ThinQTTAuth
 from thinqtt.util import create_tempfile, memoize
-from thinqtt.model.mqtt import MQTTConfiguration
+from thinqtt.model.config import MQTTConfiguration
 from thinqtt.schema import controller, initializer
 from thinqtt.client.thinq import ThinQClient
 from thinqtt.client.common import CommonClient
@@ -16,8 +16,11 @@ from thinqtt.client.common import CommonClient
 from thinqtt import AWS_IOTT_CA_CERT_URL, AWS_IOTT_ALPN_PROTOCOL
 
 
-@controller(MQTTConfiguration, auth=ThinQTTAuth)
+@controller(MQTTConfiguration)
 class ThinQTT:
+    def __init__(self, auth):
+        self._auth = auth
+
     def connect(self):
         endpoint = urlparse(self.route.mqtt_server)
         self.client.connect(endpoint.hostname, endpoint.port)
@@ -38,7 +41,7 @@ class ThinQTT:
     @property
     @memoize
     def client(self):
-        client = Client(client_id=self.auth.client_id)
+        client = Client(client_id=self._auth.client_id)
         client.tls_set_context(self.ssl_context)
         client.on_connect = self.on_connect
         client.on_message = self.on_message
@@ -46,11 +49,11 @@ class ThinQTT:
 
     @property
     def thinq_client(self):
-        return ThinQClient(base_url=self.auth.gateway.thinq2_uri, auth=self.auth)
+        return ThinQClient(base_url=self._auth.gateway.thinq2_uri, auth=self._auth)
 
     @property
     def common_client(self):
-        return CommonClient(auth=self.auth)
+        return CommonClient(auth=self._auth)
 
     @property
     def ssl_context(self):

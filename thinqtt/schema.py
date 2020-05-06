@@ -1,9 +1,10 @@
 import re
 
-
 from dataclasses import is_dataclass
 from marshmallow import Schema, SchemaOpts, EXCLUDE, post_load
 from inflection import camelize
+
+from thinqtt.util import memoize
 
 
 class BaseSchemaOpts(SchemaOpts):
@@ -51,7 +52,7 @@ class CamelIDSchema(CamelCaseSchema):
         return re.sub(r"(?<=[a-z])Id(?=[A-Z]|$)", "ID", super().transform(field_name))
 
 
-def controller(data_type, **children):
+def controller_class(data_type, **children):
     schema = data_type.Schema()
 
     def merge_args(self, kwargs):
@@ -68,19 +69,15 @@ def controller(data_type, **children):
 
     class Controller(object):
         _data: data_type = None
-        _children: AttrDict = None
 
         # XXX - fix infinite recursion error if called w/ no args
         def __init__(self, data=None, **kwargs):
-            self._children = AttrDict(
-                {key: Controller(kwargs[key]) for key, Controller in children.items()}
-            )
-
             if data is None:
                 self._data = AttrDict(kwargs)
                 self._data = schema.load(merge_args(self, kwargs))
-            elif is_dataclass(self._data):
+            elif is_dataclass(data):
                 self._data = data
+                super().__init__(**kwargs)
             else:
                 self._data = schema.load(data)
 
@@ -95,23 +92,15 @@ def controller(data_type, **children):
         # XXX - should throw attribute exception if attr not in schema
         def __getattr__(self, attr):
             if not attr.startswith("_"):
-                for container in [self._children, self._data]:
-                    if hasattr(container, attr):
-                        return getattr(container, attr)
+                if hasattr(self._data, attr):
+                    return getattr(self._data, attr)
 
             # XXX - fail if super doesn't havegetattr?
             return super().__getattr__(attr)
 
         def __setattr__(self, attr, value):
             if isinstance(self._data, data_type) and hasattr(self._data, attr):
-                if hasattr(self._children, attr):
-                    if isinstance(value, children[attr]):
-                        self._children[attr] = value
-                    else:
-                        self._children[attr] = children[attr](value)
-                    setattr(self._data, attr, value)
-                else:
-                    setattr(self._data, attr, value)
+                setattr(self._data, attr, value)
             else:
                 super().__setattr__(attr, value)
 
@@ -119,6 +108,22 @@ def controller(data_type, **children):
         return type(base_class.__name__, (Controller, base_class), {})
 
     return class_wrapper
+
+
+def controller_factory(func):
+    @property
+    @memoize
+    def inner(self, *args, **kwargs):
+        return func(self, getattr(self._data, func.__name__))
+
+    return inner
+
+
+def controller(class_or_func, **children):
+    if isinstance(class_or_func, type):
+        return controller_class(class_or_func, **children)
+    if callable(class_or_func):
+        return controller_factory(class_or_func)
 
 
 def initializer(obj, attr="_data"):
