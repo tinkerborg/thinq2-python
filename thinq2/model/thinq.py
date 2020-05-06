@@ -68,7 +68,7 @@ class DeviceDescriptor:
     snapshot: Device
 
     class Meta(CamelCaseSchema.Meta):
-        polymorph = dict(snapshot=lambda x: device_types.get(x.device_type))
+        polymorph = dict(snapshot=lambda x: device_types.get(x.device_type, Device))
 
 
 @dataclass(base_schema=CamelCaseSchema)
