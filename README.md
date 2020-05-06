@@ -2,7 +2,8 @@
 
 This is a reverse-engineered client for the LG ThinQ v2 IoT protocol. 
 
-If you are working with v1 devices, try [wideq](https://github.com/sampsyo/wideq).
+If you are working with v1 devices, try [wideq](https://github.com/sampsyo/wideq),
+which inspired this project.
 
 ## Work in progress!
 
