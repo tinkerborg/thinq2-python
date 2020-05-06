@@ -2,3 +2,6 @@ __pycache__
 *.pyc
 .*.sw?
 *.egg-info/
+
+# output by example script
+state.json

@@ -16,7 +16,7 @@ from thinqtt import AWS_IOTT_CA_CERT_URL, AWS_IOTT_ALPN_PROTOCOL
 
 
 @controller(MQTTConfiguration)
-class ThinQTT:
+class ThinQMQTT:
     def __init__(self, auth):
         self._auth = auth
 

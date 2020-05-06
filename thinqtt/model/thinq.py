@@ -24,9 +24,9 @@ class DeviceDescriptor:
     model_country_code: str
     country_code: str
     fw_ver: str
-    image_file_name: str
-    image_url: str
-    small_image_url: str
+    # image_file_name: str
+    # image_url: str
+    # small_image_url: str
     ssid: str
     mac_address: str
     network_type: str
@@ -41,14 +41,14 @@ class DeviceDescriptor:
     new_reg_yn: str
     remote_control_type: str
     user_no: str
-    model_json_ver: float
-    model_json_uri: str
-    app_module_ver: float
-    app_module_uri: str
-    app_restart_yn: str
-    app_module_size: float
-    lang_pack_product_type_ver: float
-    lang_pack_product_type_uri: str
+    # model_json_ver: float
+    # model_json_uri: str
+    # app_module_ver: float
+    # app_module_uri: str
+    # app_restart_yn: str
+    # app_module_size: float
+    # lang_pack_product_type_ver: float
+    # lang_pack_product_type_uri: str
     device_state: str
     online: bool
     area: int
@@ -57,8 +57,8 @@ class DeviceDescriptor:
     model_protocol: str
     order: int
     dr_service_yn: str
-    guide_type_yn: str
-    guide_type: str
+    # guide_type_yn: str
+    # guide_type: str
     reg_dt_utc: str
     groupable_yn: str
     controllable_yn: str
@@ -179,6 +179,14 @@ class ThinQResult(BaseThinQResult):
         if data["result_code"] != ThinQResultCode.OK:
             raise ThinQException(ThinQResultCode(data["result_code"]))
         return data["result"]
+
+@dataclass(base_schema=CamelCaseSchema)
+class ModelJsonDescriptor:
+    """ ModelJSON metadata """
+
+    model_json_ver: str
+    model_json_uri: str
+    timestamp: int
 
 
 class ModelJsonDataclass:

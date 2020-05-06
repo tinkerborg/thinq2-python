@@ -23,7 +23,7 @@ class UserProfile:
 
 
 @dataclass
-class ThinQTTSession:
+class ThinQSession:
     country_code: str
     language_code: str
     client_id: str

@@ -1,6 +1,6 @@
 from marshmallow_dataclass import dataclass
 
-from thinqtt.model.auth import ThinQTTSession
+from thinqtt.model.auth import ThinQSession
 from thinqtt.model.common import Route
 from thinqtt.model.thinq import IOTRegistration
 
@@ -16,5 +16,5 @@ class MQTTConfiguration:
 
 @dataclass
 class ThinQConfiguration:
-    auth: ThinQTTSession
+    auth: ThinQSession
     mqtt: MQTTConfiguration

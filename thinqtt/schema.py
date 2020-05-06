@@ -29,6 +29,7 @@ class BaseSchema(Schema):
         return field_name
 
     @post_load(pass_original=True)
+    # XXX - how should polymorphed fields dump?
     def polymorphism(self, item, data, **kwargs):
         for field_name, factory in self.opts.polymorph.items():
             field_type = factory(item)

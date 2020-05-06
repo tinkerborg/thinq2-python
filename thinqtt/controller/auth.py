@@ -9,12 +9,12 @@ from urllib.parse import urlencode, urljoin, urlparse, parse_qs
 from uplink.clients.io import RequestTemplate, transitions
 from thinqtt.client.oauth import OAuthClient
 from thinqtt.client.gateway import GatewayClient
-from thinqtt.model.auth import ThinQTTSession
+from thinqtt.model.auth import ThinQSession
 from thinqtt.schema import controller, initializer
 
 
-@controller(ThinQTTSession)
-class ThinQTTAuth(RequestTemplate):
+@controller(ThinQSession)
+class ThinQAuth(RequestTemplate):
     def __call__(self, request_builder):
         self._ret = request_builder.return_type
         request_builder.add_request_template(self)

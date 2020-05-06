@@ -1,12 +1,14 @@
-from uplink import Field
+from uplink import Field, Path, Query
 from uplink import get, post, delete, json
 
 from thinqtt.client.base import BaseClient
 from thinqtt.model.thinq import (
+    DeviceCollection,
+    DeviceDescriptor,
     ThinQResult,
     ThinQResultSuccess,
-    DeviceCollection,
     IOTRegistration,
+    ModelJsonDescriptor,
 )
 
 
@@ -16,6 +18,16 @@ class ThinQClient(BaseClient):
     @get("service/application/dashboard")
     def get_devices(self) -> ThinQResult(DeviceCollection):
         """Retrieves collection of user's registered devices"""
+
+    @get("service/devices/{device_id}")
+    def get_device(self, device_id: Path) -> ThinQResult(DeviceDescriptor):
+        """Retrieves collection of user's registered devices"""
+
+    @get("service/application/modeljson")
+    def get_model_json_descriptor(
+        self, device_id: Query("deviceId"), model_name: Query("modelName")
+    ) -> ThinQResult(ModelJsonDescriptor):
+        """Retrieves ModelJson descriptor for a device"""
 
     @get("service/users/client")
     def get_registered(self) -> ThinQResultSuccess():
