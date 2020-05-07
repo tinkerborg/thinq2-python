@@ -18,10 +18,10 @@ REDIRECT_URI = "https://kr.m.lgaccount.com/login/iabClose"
 
 
 def lg_oauth_signer(request_builder):
-    # LG expects the form vars to be sorted alphabetically before signing
     url = "/{}".format(request_builder.relative_url)
 
     if request_builder.info["data"]:
+        # LG expects the form vars to be sorted alphabetically before signing
         form = urlencode(sorted(request_builder.info["data"].items()))
         url = "{}?{}".format(url, form)
 
