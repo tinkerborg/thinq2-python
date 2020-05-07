@@ -18,3 +18,8 @@ def create_tempfile(content):
     file.write(content.encode("utf8"))
     file.seek(0)
     return file
+
+def end_with(string, end):
+    if string.endswith(end):
+        return string
+    return string + end
