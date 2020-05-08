@@ -4,7 +4,7 @@ from typing import List
 
 import marshmallow_dataclass
 
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, pre_load
 from marshmallow_dataclass import dataclass
 from marshmallow_enum import EnumField
 
@@ -74,6 +74,15 @@ class DeviceDescriptor:
 @dataclass(base_schema=CamelCaseSchema)
 class DeviceCollection:
     items: List[DeviceDescriptor] = field(metadata=dict(data_key="item"))
+
+    @pre_load
+    def filter_items(self, data, **kwargs):
+        """ Filter thinq1 devices as we don't currently support them """
+        try:
+            items = [i for i in data["item"] if i["platformType"] == "thinq2"]
+            return {**data, **dict(item=items)}
+        except KeyError as e:
+            return data
 
 
 @dataclass(base_schema=CamelCaseSchema)
