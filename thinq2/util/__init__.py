@@ -19,6 +19,7 @@ def create_tempfile(content):
     file.seek(0)
     return file
 
+
 def end_with(string, end):
     if string.endswith(end):
         return string

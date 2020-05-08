@@ -2,6 +2,7 @@ from uplink import Consumer
 
 from thinq2.util import end_with
 
+
 class BaseClient(Consumer):
     """ Base client class """
 
