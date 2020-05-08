@@ -35,13 +35,17 @@ else:
 
     print("\n")
 
+def save_state():
+    with open(STATE_FILE, "w") as f:
+        json.dump(vars(thinq), f)
+
+save_state()
+
 #################################################################################
 # state is easily serialized in dict form, as in this shutdown handler          #
 #################################################################################
 def shutdown(sig, frame):
     print("\nCaught SIGINT, saving application state.")
-    with open(STATE_FILE, "w") as f:
-        json.dump(vars(thinq), f)
     exit(0)
 
 
