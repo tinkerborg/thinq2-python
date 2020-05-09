@@ -4,7 +4,7 @@ import inspect
 from dataclasses import is_dataclass
 
 from attrdict import AttrDict
-from marshmallow import EXCLUDE, Schema, SchemaOpts, post_load
+from marshmallow import EXCLUDE, Schema
 from inflection import camelize
 
 from thinq2.util import memoize
