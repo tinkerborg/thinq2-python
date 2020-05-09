@@ -6,11 +6,12 @@ from OpenSSL import crypto
 from OpenSSL.SSL import FILETYPE_PEM
 from paho.mqtt.client import Client
 
-from thinq2.util import create_tempfile, memoize
 from thinq2.model.config import MQTTConfiguration
 from thinq2.schema import controller, initializer
 from thinq2.client.thinq import ThinQClient
 from thinq2.client.common import CommonClient
+from thinq2.util import memoize
+from thinq2.util.filesystem import TempDir
 
 from thinq2 import AWS_IOTT_CA_CERT_URL, AWS_IOTT_ALPN_PROTOCOL
 
@@ -58,14 +59,15 @@ class ThinQMQTT:
 
     @property
     def ssl_context(self):
-        ca_cert = create_tempfile(self.ca_cert)
-        private_key = create_tempfile(self.private_key)
-        client_cert = create_tempfile(self.registration.certificate_pem)
+        temp_dir = TempDir()
+        ca_cert_path = temp_dir.file(self.ca_cert)
+        private_key_path = temp_dir.file(self.private_key)
+        client_cert_path = temp_dir.file(self.registration.certificate_pem)
 
         context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
         context.set_alpn_protocols([AWS_IOTT_ALPN_PROTOCOL])
-        context.load_cert_chain(certfile=client_cert.name, keyfile=private_key.name)
-        context.load_verify_locations(cafile=ca_cert.name)
+        context.load_verify_locations(cafile=ca_cert_path)
+        context.load_cert_chain(certfile=client_cert_path, keyfile=private_key_path)
 
         return context
 
