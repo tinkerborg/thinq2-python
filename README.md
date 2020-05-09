@@ -27,7 +27,14 @@ to bootstrap the client. These will be stored in state for future invocations.
 
 Example:
 
+    poetry install
     COUNTRY_CODE=US LANGUAGE_CODE=en-US poetry run python example.py
+
+Example (Windows Powershell):
+
+    $env:COUNTRY_CODE=US
+    $env:LANGUAGE_CODE=en-US
+    poetry run python example.py
 
 The example script will bootstrap the application state on first run, walking
 you through the OAuth flow. If authentication succeeds, you should see a
