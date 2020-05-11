@@ -1,4 +1,4 @@
-from uplink import Field, Path, Query
+from uplink import Field, Path, Query, returns
 from uplink import get, post, delete, json
 
 from thinq2.client.base import BaseClient
@@ -18,6 +18,11 @@ class ThinQClient(BaseClient):
     @get("service/application/dashboard")
     def get_devices(self) -> ThinQResult(DeviceCollection):
         """Retrieves collection of user's registered devices with dashboard data."""
+
+    @returns.json
+    @get("service/devices/{device_id}")
+    def get_raw_device(self, device_id: Path):
+        """Retrieves an individual device without schema"""
 
     @get("service/devices/{device_id}")
     def get_device(self, device_id: Path) -> ThinQResult(DeviceDescriptor):
