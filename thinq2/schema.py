@@ -85,6 +85,7 @@ def controller_class(data_type, **children):
         def __dict__(self):
             return schema.dump(self._data)
 
+
         # XXX - should throw attribute exception if attr not in schema
         def __getattr__(self, attr):
             if not attr.startswith("_"):
