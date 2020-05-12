@@ -67,11 +67,12 @@ print("User #: {}\n".format(thinq.auth.profile.user_no))
 print("Devices:\n")
 
 for device in devices.items:
+    print("-------\nDevice: {} ({})\n".format(device.model_name, device.alias))
     print({ **thinq.mqtt.thinq_client.get_raw_device(device.device_id)["result"], **dict(deviceId="00000000-0000-0000-0000-000000000000")})
-
+    print("\n")
+    print(thinq.thinq_client.get_model_json_descriptor(device_id=device.device_id, model_name=device.model_name))
+    print("\n")
 exit()
-
-#    print("{}: {} (model {})".format(device.device_id, device.alias, device.model_name))
 
 #################################################################################
 # example of raw MQTT access                                                    #
