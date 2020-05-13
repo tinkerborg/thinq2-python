@@ -71,9 +71,14 @@ def test_initialzer_ignored_when_value_supplied(Controller, data_with_missing_qu
     assert controller.quux != quux
 
 
-# XXX - need proper test of child controllers for nested fields
-def test_child_controller_decoration(Controller, valid_data):
-    pass
+def test_initialize_nested_controller(ParentController, Controller, nested_data):
+    controller = ParentController(nested_data)
+    assert isinstance(controller.child, Controller)
+
+
+def test_nested_controller_as_dict_matches_data(ParentController, nested_data):
+    controller = ParentController(nested_data)
+    assert nested_data == vars(controller)
 
 
 @pytest.fixture
@@ -96,13 +101,29 @@ def Controller(Model):
 
 
 @pytest.fixture
-def valid_data():
-    return dict(foo="bar", quux=42)
+def ParentModel(Model):
+    @dataclass
+    class ParentModel:
+        baz: str
+        child: Model
+
+    return ParentModel
 
 
 @pytest.fixture
-def data_with_extra_field():
-    return dict(foo="bar", quux=42, boz=True)
+def ParentController(ParentModel, Controller):
+    @schema.controller(ParentModel)
+    class ParentController:
+        @schema.controller
+        def child(self, child):
+            return Controller(child)
+
+    return ParentController
+
+
+@pytest.fixture
+def valid_data():
+    return dict(foo="bar", quux=42)
 
 
 @pytest.fixture
@@ -111,5 +132,5 @@ def data_with_missing_quux():
 
 
 @pytest.fixture
-def data_with_wrong_quux_type():
-    return dict(foo="bar", quux="42")
+def nested_data(valid_data):
+    return dict(baz="xyzzy", child=valid_data)
