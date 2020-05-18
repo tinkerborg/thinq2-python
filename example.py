@@ -5,15 +5,14 @@ import signal
 
 from thinq2.controller.auth import ThinQAuth
 from thinq2.controller.thinq import ThinQ
-from thinq2.client.objectstore import ObjectStoreClient
 
 LANGUAGE_CODE = os.environ.get("LANGUAGE_CODE", "ko-KR")
 COUNTRY_CODE = os.environ.get("COUNTRY_CODE", "KR")
 STATE_FILE = os.environ.get("STATE_FILE", "state.json")
 
-#################################################################################
-# load from existing state or create a new client                               #
-#################################################################################
+#############################################################################
+# load from existing state or create a new client                           #
+#############################################################################
 if os.path.exists(STATE_FILE):
     with open(STATE_FILE, "r") as f:
         thinq = ThinQ(json.load(f))
@@ -35,15 +34,17 @@ else:
 
     print("\n")
 
+
 def save_state():
     with open(STATE_FILE, "w") as f:
         json.dump(vars(thinq), f)
 
+
 save_state()
 
-#################################################################################
-# state is easily serialized in dict form, as in this shutdown handler          #
-#################################################################################
+#############################################################################
+# state is easily serialized in dict form, as in this shutdown handler      #
+#############################################################################
 def shutdown(sig, frame):
     print("\nCaught SIGINT, saving application state.")
     exit(0)
@@ -51,9 +52,9 @@ def shutdown(sig, frame):
 
 signal.signal(signal.SIGINT, shutdown)
 
-#################################################################################
-# display some information about the user's account/devices                     #
-#################################################################################
+#############################################################################
+# display some information about the user's account/devices                 #
+#############################################################################
 devices = thinq.mqtt.thinq_client.get_devices()
 
 if len(devices.items) == 0:
@@ -63,15 +64,15 @@ if len(devices.items) == 0:
 
 print("UserID: {}".format(thinq.auth.profile.user_id))
 print("User #: {}\n".format(thinq.auth.profile.user_no))
-
 print("Devices:\n")
+
 
 for device in devices.items:
     print("{}: {} (model {})".format(device.device_id, device.alias, device.model_name))
 
-#################################################################################
-# example of raw MQTT access                                                    #
-#################################################################################
+#############################################################################
+# example of raw MQTT access                                                #
+#############################################################################
 
 print("\nListening for device events. Use Ctrl-C/SIGINT to quit.\n")
 

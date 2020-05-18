@@ -1,6 +1,5 @@
 import pytest
 
-import marshmallow
 from marshmallow_dataclass import dataclass
 
 from thinq2 import schema
