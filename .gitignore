@@ -2,6 +2,7 @@ __pycache__
 *.pyc
 .*.sw?
 *.egg-info/
-
+.venv/
+.vscode/
 # output by example script
 state.json
