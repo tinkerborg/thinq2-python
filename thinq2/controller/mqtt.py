@@ -6,7 +6,7 @@ from OpenSSL import crypto
 from OpenSSL.SSL import FILETYPE_PEM
 from paho.mqtt.client import Client
 
-from thinq2.model.config import MQTTConfiguration
+from thinq2.model.mqtt import MQTTConfiguration, MQTTMessage
 from thinq2.schema import controller, initializer
 from thinq2.client.thinq import ThinQClient
 from thinq2.client.common import CommonClient
@@ -22,21 +22,36 @@ class ThinQMQTT:
         self._auth = auth
 
     def connect(self):
-        endpoint = urlparse(self.route.mqtt_server)
-        self.client.connect(endpoint.hostname, endpoint.port)
+        if not self.client.is_connected():
+            endpoint = urlparse(self.route.mqtt_server)
+            self.client.connect(endpoint.hostname, endpoint.port)
 
     def loop_start(self):
+        self.connect()
         self.client.loop_start()
 
     def loop_forever(self):
+        self.connect()
         self.client.loop_forever()
+
+    def on_message(self, client, userdata, msg):
+        self._on_message(client, userdata, msg)
 
     def on_connect(self, client, userdata, flags, rc):
         for topic in self.registration.subscriptions:
             client.subscribe(topic, 1)
 
-    def on_message(self, client, userdata, msg):
+    def on_device_message(self, message):
         pass
+
+    def _on_message(self, client, userdata, msg):
+        # XXX - nastiness
+        message = None
+        try:
+            message = MQTTMessage.Schema().loads(msg.payload)
+        except Exception as e:
+            print("Can't parse MQTT message:", e)
+        self.on_device_message(message)
 
     @property
     @memoize

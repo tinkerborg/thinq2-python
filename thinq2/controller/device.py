@@ -1,3 +1,5 @@
+from deepmerge import Merger
+
 from thinq2.schema import controller
 from thinq2.util import memoize
 from thinq2.client.thinq import ThinQClient
@@ -9,6 +11,22 @@ from thinq2.model.thinq import DeviceDescriptor, ModelJsonDataclass
 class ThinQDevice:
     def __init__(self, auth):
         self._auth = auth
+        self._on_update = None
+
+    def update(self, state):
+        schema = self.snapshot.Schema()
+        snapshot = schema.dump(self.snapshot)
+        update = self._merger.merge(snapshot, state)
+        self.snapshot = schema.load(update)
+        if self._on_update:
+            self._on_update(self)
+
+    def on_update(self, func):
+        self._on_update = func
+
+    @property
+    def _merger(self):
+        return Merger([(dict, ["merge"])], ["override"], ["override"])
 
     @property
     def state(self):

@@ -14,12 +14,14 @@ marshmallow_enum = "^1.5.1"
 PyOpenSSL = "^19.1.0"
 paho-mqtt = "^1.5.0"
 attrdict = "^2.0.1"
+deepmerge = "^0.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 pylint = "^2.4.4"
 black = "^19.10b0"
 flake8 = "^3.8.1"
+rope = "^0.17.0"
 
 [build-system]
 requires = ["poetry>=0.12"]

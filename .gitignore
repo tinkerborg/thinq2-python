@@ -1,8 +1,9 @@
-__pycache__
+__pycache__/
 *.pyc
 .*.sw?
 *.egg-info/
 .venv/
 .vscode/
+.pytest_cache
 # output by example script
 state.json
