@@ -69,8 +69,8 @@ class DeviceDescriptor:
 
     @post_load(pass_original=True)
     def polymorphism(self, item, data, **kwargs):
-        device_schema = device_types.get(item.device_type, Device).Schema()
-        item.snapshot = device_schema.load(data.get("snapshot", {}))
+        device_schema = device_types.get(item["device_type"], Device).Schema()
+        item["snapshot"] = device_schema.load(data.get("snapshot", {}))
         return item
 
 
